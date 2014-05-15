@@ -50,7 +50,7 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
-docs/source/generated
+docs/source/generated/*
 
 
 *.log.*
