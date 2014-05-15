@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>QuerySet &mdash; AzureODM Python 0.1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="AzureODM Python 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="API" href="../../reference.html"/>
+        <link rel="next" title="Service" href="AzureODM.Service.html"/>
+        <link rel="prev" title="Fields" href="AzureODM.Fields.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> AzureODM Python</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="AzureODM.Entity.html">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AzureODM.Fields.html">Fields</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">QuerySet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AzureODM.Service.html">Service</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">AzureODM Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../reference.html">API</a> &raquo;</li>
+      
+    <li>QuerySet</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../../_sources/generated/AzureODM/AzureODM.QuerySet.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="module-AzureODM.QuerySet">
+<span id="queryset"></span><h1>QuerySet<a class="headerlink" href="#module-AzureODM.QuerySet" title="Permalink to this headline">¶</a></h1>
+<p>QuerySet</p>
+<dl class="function">
+<dt id="AzureODM.QuerySet.obj_to_query_value">
+<tt class="descclassname">AzureODM.QuerySet.</tt><tt class="descname">obj_to_query_value</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#obj_to_query_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.obj_to_query_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert obj to query value</p>
+<ul class="simple">
+<li>str: &#8216;value&#8217;</li>
+<li>int: value</li>
+<li>float: value</li>
+<li>bool: true or false</li>
+<li>datetime: datetime&#8216;2008-07-10T00:00:00Z&#8217;</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="AzureODM.QuerySet.QOperator">
+<em class="property">class </em><tt class="descclassname">AzureODM.QuerySet.</tt><tt class="descname">QOperator</tt><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QOperator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QOperator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>Store &amp; (AND), | (OR)</p>
+<p>used when combining queries</p>
+<dl class="attribute">
+<dt id="AzureODM.QuerySet.QOperator.__weakref__">
+<tt class="descname">__weakref__</tt><a class="headerlink" href="#AzureODM.QuerySet.QOperator.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="AzureODM.QuerySet.QNode">
+<em class="property">class </em><tt class="descclassname">AzureODM.QuerySet.</tt><tt class="descname">QNode</tt><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>Query Node</p>
+<dl class="method">
+<dt id="AzureODM.QuerySet.QNode._combine">
+<tt class="descname">_combine</tt><big>(</big><em>other</em>, <em>operation</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QNode._combine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QNode._combine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Other can be either Q, or QCombination</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="AzureODM.QuerySet.QNode.__weakref__">
+<tt class="descname">__weakref__</tt><a class="headerlink" href="#AzureODM.QuerySet.QNode.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="AzureODM.QuerySet.Q">
+<em class="property">class </em><tt class="descclassname">AzureODM.QuerySet.</tt><tt class="descname">Q</tt><big>(</big><em>**query</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#Q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.Q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#AzureODM.QuerySet.QNode" title="AzureODM.QuerySet.QNode"><tt class="xref py py-class docutils literal"><span class="pre">AzureODM.QuerySet.QNode</span></tt></a></p>
+<p>where(Q(PartitionKey=&#8217;p1&#8217;) | Q(PartitionKey=&#8217;p2&#8217;)) -&gt;
+<tt class="docutils literal"><span class="pre">(PartitionKey</span> <span class="pre">eq</span> <span class="pre">'p1'</span> <span class="pre">or</span> <span class="pre">PartitionKey</span> <span class="pre">eq</span> <span class="pre">'p2')</span></tt></p>
+<p>if we attach another andWhere(Q(RowKey=&#8217;r1&#8217;) | Q(RowKey=&#8217;r2&#8217;))
+the query will become:</p>
+<dl class="docutils">
+<dt><a href="#id1"><span class="problematic" id="id2">``</span></a>(PartitionKey eq &#8216;p1&#8217; or PartitionKey eq &#8216;p2&#8217;) and (RowKey eq &#8216;r1 or</dt>
+<dd>RowKey eq &#8216;r2&#8217;)``</dd>
+</dl>
+<dl class="method">
+<dt id="AzureODM.QuerySet.Q.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>**query</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#Q.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.Q.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the query to string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">if <tt class="docutils literal"><span class="pre">query</span></tt> is none</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="AzureODM.QuerySet.QCombination">
+<em class="property">class </em><tt class="descclassname">AzureODM.QuerySet.</tt><tt class="descname">QCombination</tt><big>(</big><em>operation</em>, <em>q1</em>, <em>q2</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QCombination"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QCombination" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#AzureODM.QuerySet.QNode" title="AzureODM.QuerySet.QNode"><tt class="xref py py-class docutils literal"><span class="pre">AzureODM.QuerySet.QNode</span></tt></a></p>
+<p>Combination of Q and QOperator s</p>
+<dl class="method">
+<dt id="AzureODM.QuerySet.QCombination.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>operation</em>, <em>q1</em>, <em>q2</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QCombination.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QCombination.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>q2</strong> (<em>QNode</em>) &#8211; </li>
+<li><strong>q1</strong> (<em>QNode</em>) &#8211; it should be exactly two items in queries
+and they will be combined into a new QCombination with
+<tt class="docutils literal"><span class="pre">operation</span></tt> in between</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> &#8211; if queries is not a list</li>
+<li><strong>ValueError</strong> &#8211; if len(queries) != 2</li>
+<li><strong>TypeError</strong> &#8211; if operation is not a <a class="reference internal" href="#AzureODM.QuerySet.QOperator" title="AzureODM.QuerySet.QOperator"><tt class="xref py py-class docutils literal"><span class="pre">QOperator</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="AzureODM.QuerySet.QuerySet">
+<em class="property">class </em><tt class="descclassname">AzureODM.QuerySet.</tt><tt class="descname">QuerySet</tt><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QuerySet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>support queries:</p>
+<ul class="simple">
+<li>eq <tt class="docutils literal"><span class="pre">field__eq=value</span></tt></li>
+<li>gt <tt class="docutils literal"><span class="pre">field__gt=value</span></tt></li>
+<li>ge <tt class="docutils literal"><span class="pre">field__ge=value</span></tt></li>
+<li>lt <tt class="docutils literal"><span class="pre">field__lt=value</span></tt></li>
+<li>le <tt class="docutils literal"><span class="pre">field__le=value</span></tt></li>
+<li>ne <tt class="docutils literal"><span class="pre">field__ne=value</span></tt></li>
+<li>in <tt class="docutils literal"><span class="pre">field__in=[]</span></tt></li>
+<li>and <a class="reference internal" href="#AzureODM.QuerySet.QuerySet.andWhere" title="AzureODM.QuerySet.QuerySet.andWhere"><tt class="xref py py-func docutils literal"><span class="pre">andWhere()</span></tt></a></li>
+<li>not <a class="reference internal" href="#AzureODM.QuerySet.QuerySet.notWhere" title="AzureODM.QuerySet.QuerySet.notWhere"><tt class="xref py py-func docutils literal"><span class="pre">notWhere()</span></tt></a></li>
+<li>or <a class="reference internal" href="#AzureODM.QuerySet.QuerySet.orWhere" title="AzureODM.QuerySet.QuerySet.orWhere"><tt class="xref py py-func docutils literal"><span class="pre">orWhere()</span></tt></a></li>
+</ul>
+<dl class="method">
+<dt id="AzureODM.QuerySet.QuerySet.query_parser">
+<tt class="descname">query_parser</tt><big>(</big><em>f</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.query_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QuerySet.query_parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>a decorator to compile where queries</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.QuerySet.QuerySet.where">
+<tt class="descname">where</tt><big>(</big><em>query_string</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.where"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QuerySet.where" title="Permalink to this definition">¶</a></dt>
+<dd><p>the entry point of <tt class="docutils literal"><span class="pre">filter</span></tt>
+.. py:decoratormethod:: query_parser</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.QuerySet.QuerySet.andWhere">
+<tt class="descname">andWhere</tt><big>(</big><em>query_string</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.andWhere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QuerySet.andWhere" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">and</span></tt></p>
+<dl class="method">
+<dt>
+<tt class="descclassname">&#64;</tt><tt class="descname">query_parser</tt><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.query_parser"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.QuerySet.QuerySet.orWhere">
+<tt class="descname">orWhere</tt><big>(</big><em>query_string</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.orWhere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QuerySet.orWhere" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">or</span></tt></p>
+<dl class="method">
+<dt>
+<tt class="descclassname">&#64;</tt><tt class="descname">query_parser</tt><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.query_parser"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.QuerySet.QuerySet.notWhere">
+<tt class="descname">notWhere</tt><big>(</big><em>query_string</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.notWhere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QuerySet.notWhere" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">not</span></tt></p>
+<dl class="method">
+<dt>
+<tt class="descclassname">&#64;</tt><tt class="descname">query_parser</tt><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.query_parser"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.QuerySet.QuerySet.select">
+<tt class="descname">select</tt><big>(</big><em>entity</em>, <em>fields=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QuerySet.select" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fields</strong> &#8211; fields can be ether a list or &#8216;*&#8217; or <tt class="docutils literal"><span class="pre">None</span></tt>, if
+its not <tt class="docutils literal"><span class="pre">None</span></tt> or &#8216;*&#8217;, <tt class="docutils literal"><span class="pre">PartitionKey</span></tt> and <tt class="docutils literal"><span class="pre">RowKey</span></tt> will be
+added if not existed</li>
+<li><strong>entity</strong> (<em>Entity</em>) &#8211; must be an instance of <cite>Entity</cite></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> &#8211; if fileds is not <tt class="docutils literal"><span class="pre">dict</span></tt> or None</li>
+<li><strong>TypeError</strong> &#8211; if entity is not an instance of <tt class="docutils literal"><span class="pre">Entity</span></tt></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.QuerySet.QuerySet.limit">
+<tt class="descname">limit</tt><big>(</big><em>limit</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.limit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QuerySet.limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the <tt class="docutils literal"><span class="pre">top</span></tt> query</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>limit</strong> (<em>int</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises TypeError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if limit is not int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.QuerySet.QuerySet.go">
+<tt class="descname">go</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/AzureODM/QuerySet.html#QuerySet.go"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.QuerySet.QuerySet.go" title="Permalink to this definition">¶</a></dt>
+<dd><p>will call <tt class="xref py py-attr docutils literal"><span class="pre">_targeted_entity</span></tt> &#8216;s <tt class="xref py py-func docutils literal"><span class="pre">Entity.find()</span></tt></p>
+<p>this will pass <tt class="xref py py-attr docutils literal"><span class="pre">_select</span></tt> to <tt class="xref py py-func docutils literal"><span class="pre">Entity.find()</span></tt> and pass
+<tt class="xref py py-attr docutils literal"><span class="pre">filter</span></tt> (query string) with the limit</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="AzureODM.QuerySet.QuerySet.__weakref__">
+<tt class="descname">__weakref__</tt><a class="headerlink" href="#AzureODM.QuerySet.QuerySet.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="AzureODM.Service.html" class="btn btn-neutral float-right" title="Service"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="AzureODM.Fields.html" class="btn btn-neutral" title="Fields"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Chen Liang.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

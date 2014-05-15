@@ -1,0 +1,679 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AzureODM.Entity &mdash; AzureODM Python 0.1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="AzureODM Python 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> AzureODM Python</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/AzureODM/AzureODM.Entity.html">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/AzureODM/AzureODM.Fields.html">Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/AzureODM/AzureODM.QuerySet.html">QuerySet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/AzureODM/AzureODM.Service.html">Service</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">AzureODM Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>AzureODM.Entity</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for AzureODM.Entity</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    AzureTableODM.Entity</span>
+
+<span class="sd">    The table entity superclass</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">.Fields</span> <span class="kn">import</span> <span class="n">GenericField</span>
+<span class="kn">from</span> <span class="nn">.QuerySet</span> <span class="kn">import</span> <span class="n">QuerySet</span>
+<span class="kn">from</span> <span class="nn">re</span> <span class="kn">import</span> <span class="nb">compile</span> <span class="k">as</span> <span class="n">re_compile</span>
+<span class="kn">from</span> <span class="nn">re</span> <span class="kn">import</span> <span class="n">IGNORECASE</span> <span class="k">as</span> <span class="n">re_IGNORECASE</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">.Service</span> <span class="kn">import</span> <span class="n">get_table_service</span>
+<span class="kn">from</span> <span class="nn">azure.storage</span> <span class="kn">import</span> <span class="n">Entity</span> <span class="k">as</span> <span class="n">AzureTableEntity</span>
+<span class="kn">from</span> <span class="nn">azure</span> <span class="kn">import</span> <span class="n">WindowsAzureMissingResourceError</span><span class="p">,</span> <span class="n">WindowsAzureConflictError</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+
+
+<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity">[docs]</a><span class="k">class</span> <span class="nc">Entity</span><span class="p">:</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Entity superclass</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">metas</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;table_name&#39;</span><span class="p">:</span> <span class="bp">None</span>
+    <span class="p">}</span>
+    <span class="n">_table_name_re</span> <span class="o">=</span> <span class="n">re_compile</span><span class="p">(</span><span class="s">&#39;^[a-z][a-z|0-9]*$&#39;</span><span class="p">,</span> <span class="n">re_IGNORECASE</span><span class="p">)</span>
+    <span class="n">_created_table</span> <span class="o">=</span> <span class="bp">False</span>
+
+<div class="viewcode-block" id="Entity.__init__"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :raises AttributeError: if ``table_name`` not in :attr:`metas`</span>
+<span class="sd">        :raises ValueError: if :attr:`metas.table_name` not alphnum and starts</span>
+<span class="sd">            with [a-z]</span>
+<span class="sd">        :raises KeyError: if ``kwargs`` has undefined key</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;no table_name meta provided&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table_name_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;table_name is not in valid format, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">]))</span>
+
+        <span class="c">#: indicate whether the entity is new (haven&#39;t been saved to Azure)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_new</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c">#: whether any attributes changed comparing to :attr:`_saved_copy`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_changed</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="c">#: whether the document contains only a subset of fileds (select used)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_partial</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="c">#: when populate the entity, the original copy is saved here</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_saved_copy</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c">#: saved_etag, store the etag meta from the server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_saved_etag</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache_fields</span><span class="p">()</span>
+        <span class="c"># taking values from ``kwargs``</span>
+        <span class="n">k_copy</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">k_copy</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">k_copy</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+                <span class="k">del</span> <span class="n">k_copy</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+
+        <span class="c"># if there are keys in ``kwargs`` not match the field</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k_copy</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;param not matches the schema: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kwargs</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Entity._cache_fields"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity._cache_fields">[docs]</a>    <span class="k">def</span> <span class="nf">_cache_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">re_cache</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;create instance attribute &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="s">&#39;_f&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">re_cache</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="s">&#39;_f&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span>  <span class="nb">isinstance</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">GenericField</span><span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__dict__</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+            <span class="c"># require ``PartitionKey`` and ``RowKey``</span>
+            <span class="k">if</span> <span class="s">&#39;PartitionKey&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">_f</span> <span class="ow">or</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="s">&#39;PartitionKey&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_type</span><span class="o">.</span><span class="n">__name__</span> <span class="o">!=</span> <span class="s">&#39;str&#39;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;a StringField PartitionKey is required&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s">&#39;RowKey&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">_f</span> <span class="ow">or</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="s">&#39;RowKey&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_type</span><span class="o">.</span><span class="n">__name__</span> <span class="o">!=</span> <span class="s">&#39;str&#39;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;a StringField RowKey is required&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">_f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="Entity._validate"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity._validate">[docs]</a>    <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :raises ValueError: if required field is None</span>
+<span class="sd">            when :attr:`_is_partial` is True, when :attr:`_is_partial` is</span>
+<span class="sd">            False, only ``PartitionKey`` and ``RowKey`` is required</span>
+<span class="sd">        :raises TypeError: if field value doesn&#39;t match the type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_partial</span> <span class="ow">is</span> <span class="bp">False</span> <span class="ow">or</span> \
+                            <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;PartitionKey&#39;</span><span class="p">,</span> <span class="s">&#39;RowKey&#39;</span><span class="p">]:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;{} is required&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">_type</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;{} is not type: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">_type</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Entity._copy_into_saved"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity._copy_into_saved">[docs]</a>    <span class="k">def</span> <span class="nf">_copy_into_saved</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        copy the current entity values into :attr:`_saved_copy`</span>
+
+<span class="sd">        This should be called after:</span>
+
+<span class="sd">        * :func:`_populate_with_dict`</span>
+<span class="sd">        * :func:`save`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#self._saved_copy = {}</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_saved_copy</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Entity._check_chagned"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity._check_chagned">[docs]</a>    <span class="k">def</span> <span class="nf">_check_chagned</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        compare the current values with :attr:`_saved_copy`</span>
+
+<span class="sd">        :returns: True if any one field is different</span>
+<span class="sd">        :returns: False if none of the field is different</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_saved_copy</span> \
+                    <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_saved_copy</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="Entity._populate_with_dict"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity._populate_with_dict">[docs]</a>    <span class="k">def</span> <span class="nf">_populate_with_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">is_partial</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        populte attributes with a dictionary contains key-value pairs</span>
+
+<span class="sd">        Will only populate exist fields, none-exist fields will be ignored</span>
+
+<span class="sd">        will convert datetime object to UTC aware ``datetime``</span>
+
+<span class="sd">        :param dict dic: can also be :class:`AzureTableEntity`</span>
+<span class="sd">        :param bool is_partial: whether the ``dic`` is only a partial of</span>
+<span class="sd">            the entity (return by using ``select``) default is ``False``,</span>
+<span class="sd">            if the number of valid field value in ``dic`` equals the length</span>
+<span class="sd">            of :attr:`_f`, we will ignore the ``is_partial`` and set it to</span>
+<span class="sd">            ``False``</span>
+<span class="sd">        :raises TypeError: if ``dic`` is not a ``dict`` or</span>
+<span class="sd">            ``azure.storage.Entity``</span>
+<span class="sd">        :raises TypeError: if the ``key`` in dict doesn&#39;t match the type</span>
+<span class="sd">            of ``field`` &#39;s type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">AzureTableEntity</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;dic is not a dict, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dic</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">AzureTableEntity</span><span class="p">):</span>
+            <span class="n">dic</span> <span class="o">=</span> <span class="n">dic</span><span class="o">.</span><span class="n">__dict__</span>
+        <span class="n">valid_fields_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">etagged</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dic</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">:</span>
+                <span class="c"># handle require_serializing</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">require_serializing</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">serialized_type</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;expect value to be {} for deserialization,&#39;</span> <span class="o">+</span>\
+                            <span class="s">&#39; but got {}&#39;</span>
+                        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                            <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">serialized_type</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+                                       <span class="n">value</span><span class="p">)</span>
+                        <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">_type</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;expect {} for key {}, but got {}&#39;</span>
+                                        <span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">_type</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+                                        <span class="n">key</span><span class="p">,</span>
+                                        <span class="n">value</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">tzinfo</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="n">valid_fields_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;etag&#39;</span><span class="p">:</span>
+                <span class="c"># save etag to :attr:`_saved_etag`</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_saved_etag</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="n">etagged</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">valid_fields_count</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_partial</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_partial</span> <span class="o">=</span> <span class="n">is_partial</span>
+
+        <span class="k">if</span> <span class="n">etagged</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_changed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_chagned</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_new</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_changed</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_copy_into_saved</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Entity._to_dict"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity._to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        generate a ``dict`` for Azure SDK</span>
+
+<span class="sd">        :rtype: :class:`dict`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">require_serializing</span><span class="p">:</span>
+                <span class="n">dic</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+                <span class="k">assert</span> <span class="n">dic</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span> \
+                    <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">field</span><span class="o">.</span><span class="n">serialized_type</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dic</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">dic</span>
+
+    <span class="c">#@staticmethod</span></div>
+<div class="viewcode-block" id="Entity.inject_table_service"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.inject_table_service">[docs]</a>    <span class="k">def</span> <span class="nf">inject_table_service</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;a decorator to ensure :func:`get_table_service` won&#39;t raise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="c"># will only inject if ``ts`` not in ``kwargs``</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;ts&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ts&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">ts</span> <span class="o">=</span> <span class="n">get_table_service</span><span class="p">()</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ts</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wrapper</span><span class="p">,</span> <span class="s">&#39;__doc__&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wrapper</span><span class="o">.</span><span class="n">__doc__</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">wrapper</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">        .. py:decoratormethod::&#39;</span> <span class="o">+</span> \
+                <span class="s">&#39; inject_table_service&#39;</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+</div>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_create_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_created_table</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="n">ts</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">],</span>
+                            <span class="n">fail_on_exist</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_created_table</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="c"># query</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="nd">@inject_table_service</span>
+<div class="viewcode-block" id="Entity.findOne"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.findOne">[docs]</a>    <span class="k">def</span> <span class="nf">findOne</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">partition_key</span><span class="p">,</span> <span class="n">row_key</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;a wrapper around :func:`azure.storage.TableService.get_entity`</span>
+
+<span class="sd">        :param str partition_key:</span>
+<span class="sd">        :param str row_key:</span>
+<span class="sd">        :param str select:</span>
+<span class="sd">        :param azure.storage.TableService ts:</span>
+<span class="sd">        :raises TypeError: if select is not a string</span>
+<span class="sd">        :returns: None if not found</span>
+<span class="sd">        :returns: an instance of :class:`Entity` if found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;select is not a string, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">select</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">raw_entity</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_entity</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">],</span>
+                                       <span class="n">partition_key</span><span class="o">=</span><span class="n">partition_key</span><span class="p">,</span>
+                                       <span class="n">row_key</span><span class="o">=</span><span class="n">row_key</span><span class="p">,</span>
+                                       <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">WindowsAzureMissingResourceError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">is_partial</span> <span class="o">=</span> <span class="p">(</span><span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">select</span> <span class="o">!=</span> <span class="s">&#39;*&#39;</span><span class="p">)</span>
+        <span class="n">new_entity</span> <span class="o">=</span> <span class="bp">self</span><span class="p">()</span>
+        <span class="n">new_entity</span><span class="o">.</span><span class="n">_populate_with_dict</span><span class="p">(</span><span class="n">dic</span><span class="o">=</span><span class="n">raw_entity</span><span class="p">,</span> <span class="n">is_partial</span><span class="o">=</span><span class="n">is_partial</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;PartitionKey&#39;</span> <span class="ow">in</span> <span class="n">select</span><span class="p">:</span>
+            <span class="n">new_entity</span><span class="o">.</span><span class="n">PartitionKey</span> <span class="o">=</span> <span class="n">partition_key</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;RowKey&#39;</span> <span class="ow">in</span> <span class="n">select</span><span class="p">:</span>
+            <span class="n">new_entity</span><span class="o">.</span><span class="n">RowKey</span> <span class="o">=</span> <span class="n">row_key</span>
+        <span class="k">return</span> <span class="n">new_entity</span>
+</div>
+    <span class="nd">@classmethod</span>
+    <span class="nd">@inject_table_service</span>
+<div class="viewcode-block" id="Entity.find"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;a wrapper around :func:`azure.storage.TableService.query_entity`</span>
+
+<span class="sd">        :param str filter:</span>
+<span class="sd">        :param str select:</span>
+<span class="sd">        :param int limit: alias for ``top``</span>
+<span class="sd">        :raises TypeError: if filter is not None or str</span>
+<span class="sd">        :raises TypeError: if select is not None or str</span>
+<span class="sd">        :raises TypeError: if limit is not None or int</span>
+<span class="sd">        :returns: empty list if nothing</span>
+<span class="sd">        :returns: list of :class:`Entity`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;filter has to be None or str, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">filter</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;select has to be None or str, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">select</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;limit has to be None or int, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">limit</span><span class="p">))</span>
+        <span class="n">raw_entities</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">query_entities</span><span class="p">(</span>
+            <span class="n">table_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">],</span>
+            <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">,</span>
+            <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span>
+            <span class="n">top</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">is_partial</span> <span class="o">=</span> <span class="p">(</span><span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">select</span> <span class="o">!=</span> <span class="s">&#39;*&#39;</span><span class="p">)</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">raw_entity</span> <span class="ow">in</span> <span class="n">raw_entities</span><span class="p">:</span>
+            <span class="n">new_entity</span> <span class="o">=</span> <span class="bp">self</span><span class="p">()</span>
+            <span class="n">new_entity</span><span class="o">.</span><span class="n">_populate_with_dict</span><span class="p">(</span>
+                <span class="n">dic</span><span class="o">=</span><span class="n">raw_entity</span><span class="p">,</span> <span class="n">is_partial</span><span class="o">=</span><span class="n">is_partial</span><span class="p">)</span>
+            <span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_entity</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entities</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Entity.select"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;query entry point</span>
+
+<span class="sd">        will pass the select to :class:`QuerySet`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">QuerySet</span><span class="p">()</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Entity._pre_save"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity._pre_save">[docs]</a>    <span class="k">def</span> <span class="nf">_pre_save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;perform presave operations, maybe can provide pre_save hooks</span>
+<span class="sd">        in the future</span>
+
+<span class="sd">        * check if the entity is valid</span>
+<span class="sd">        * check if :func:`_check_chagned` and change :attr:`_is_changed`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_changed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_chagned</span><span class="p">()</span>
+</div>
+    <span class="nd">@inject_table_service</span>
+<div class="viewcode-block" id="Entity.save_insert"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.save_insert">[docs]</a>    <span class="k">def</span> <span class="nf">save_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;a wrapper around Azure&#39;s :func:`insert_entity`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">]</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">insert_entity</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">)</span>
+</div>
+    <span class="nd">@inject_table_service</span>
+<div class="viewcode-block" id="Entity.save_insert_or_replace"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.save_insert_or_replace">[docs]</a>    <span class="k">def</span> <span class="nf">save_insert_or_replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;a wrapper around Azure&#39;s :func:`insert_or_replace_entity`&quot;&quot;&quot;</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">]</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">insert_or_replace_entity</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span>
+                                           <span class="n">partition_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PartitionKey</span><span class="p">,</span>
+                                           <span class="n">row_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">RowKey</span><span class="p">,</span>
+                                           <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">)</span>
+</div>
+    <span class="nd">@inject_table_service</span>
+<div class="viewcode-block" id="Entity.save_insert_or_merge"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.save_insert_or_merge">[docs]</a>    <span class="k">def</span> <span class="nf">save_insert_or_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;a wrapper around Azure&#39;s :func:`insert_or_merge_entity`&quot;&quot;&quot;</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">]</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">insert_or_merge_entity</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span>
+                                         <span class="n">partition_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PartitionKey</span><span class="p">,</span>
+                                         <span class="n">row_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">RowKey</span><span class="p">,</span>
+                                         <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">)</span>
+</div>
+    <span class="nd">@inject_table_service</span>
+<div class="viewcode-block" id="Entity.save_merge"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.save_merge">[docs]</a>    <span class="k">def</span> <span class="nf">save_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;a wrapper around Azure&#39;s :func:`merge_entity`&quot;&quot;&quot;</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">]</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">merge_entity</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span>
+                               <span class="n">partition_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PartitionKey</span><span class="p">,</span>
+                               <span class="n">row_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">RowKey</span><span class="p">,</span>
+                               <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">)</span>
+</div>
+    <span class="nd">@inject_table_service</span>
+<div class="viewcode-block" id="Entity.save_replace"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.save_replace">[docs]</a>    <span class="k">def</span> <span class="nf">save_replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;a wrapper around Azure&#39;s :func:`update_entity`&quot;&quot;&quot;</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">]</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">update_entity</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span>
+                                <span class="n">partition_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PartitionKey</span><span class="p">,</span>
+                                <span class="n">row_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">RowKey</span><span class="p">,</span>
+                                <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Entity.save"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force_replace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+             <span class="n">force_merge</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">force_save</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+             <span class="n">ignore_conflict</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;save the entity to server</span>
+
+<span class="sd">        **possible actions:**</span>
+
+<span class="sd">        * ``force_save`` to override :attr:`_is_changed`</span>
+
+<span class="sd">        * insert (avoiding unknowleged replacing/merging) :func:`insert_entity`</span>
+
+<span class="sd">            * if :attr:`_is_new` is ``True``</span>
+<span class="sd">            * if ``ignore_conflict`` is True,</span>
+<span class="sd">                :class:`azure.WindowsAzureConflictError`, will be</span>
+<span class="sd">                ignored</span>
+
+<span class="sd">        * insert or replace (update) :func:`insert_or_replace_entity`</span>
+
+<span class="sd">            * if :attr:`_is_new` is True</span>
+<span class="sd">            * **and** ``force_replace`` is True</span>
+
+<span class="sd">        * insert or merge :func:`insert_or_merge_entity`</span>
+
+<span class="sd">            * if :attr:`_is_new` is True</span>
+<span class="sd">            * **and** ``force_merge`` is True</span>
+
+<span class="sd">        * merge :func:`merge_entity`</span>
+
+<span class="sd">            * if :attr:`_is_new` is False</span>
+<span class="sd">            * **and** if :attr:`_is_partial` is True</span>
+<span class="sd">            * **or** ``force_merge`` is True</span>
+
+<span class="sd">        * replace (update) :func:`update_entity`</span>
+
+<span class="sd">            * if :attr:`_is_new` is False</span>
+<span class="sd">            * **and** if :attr:`_is_partial` is False</span>
+<span class="sd">            * **or** ``force_replace`` is True</span>
+
+
+<span class="sd">        **we need to check the validation and check changes**</span>
+
+<span class="sd">        by calling :func:`_pre_save`</span>
+
+<span class="sd">        :param bool force_replace: default = False</span>
+<span class="sd">        :param bool force_merge: default = False</span>
+<span class="sd">        :param bool force_save: default = False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pre_save</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_new</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">force_merge</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_insert_or_merge</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">force_replace</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_insert_or_replace</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_insert</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">WindowsAzureConflictError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ignore_conflict</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">WindowsAzureConflictError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_changed</span> <span class="ow">is</span> <span class="bp">False</span> <span class="ow">and</span> <span class="n">force_save</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_partial</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">force_replace</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_replace</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_merge</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">force_merge</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_merge</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_replace</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_after_save</span><span class="p">(</span><span class="n">saved_entity_dict</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Entity._after_save"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity._after_save">[docs]</a>    <span class="k">def</span> <span class="nf">_after_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saved_entity_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;called after save function, if successful</span>
+
+<span class="sd">        some functions will return a full entity_dict,</span>
+<span class="sd">        we will call :func:`_populate_with_dict`</span>
+
+<span class="sd">        * ``insert_entity``</span>
+
+<span class="sd">        some functions will only return a dict with only &#39;etag&#39; key,</span>
+<span class="sd">        we will manually call :func:`_copy_into_saved` and change status</span>
+<span class="sd">        variables</span>
+
+<span class="sd">        * ``update_entity``</span>
+<span class="sd">        * ``merge_entity``</span>
+<span class="sd">        * ``insert_or_replace_entity``</span>
+<span class="sd">        * ``insert_or_merge_entity``</span>
+
+<span class="sd">        * change :attr:`_is_new` to False (via :func:`_populate_with_dict`)</span>
+<span class="sd">        * change :attr:`_is_changed` to False (via :func:`_populate_with_dict`)</span>
+<span class="sd">        * change :attr:`_saved_etag` (via :func:`_populate_with_dict`)</span>
+
+<span class="sd">        :param dict saved_entity_dict: could also be AzureEntity</span>
+<span class="sd">        :raises TypeError: if saved_entity_dict is other,</span>
+<span class="sd">        :raises KeyError: if etag is not found in dict</span>
+<span class="sd">        :returns: True if everything is fine</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">saved_entity_dict</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">AzureTableEntity</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;saved_entity_dict is not a dict, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">saved_entity_dict</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">saved_entity_dict</span><span class="p">,</span> <span class="n">AzureTableEntity</span><span class="p">):</span>
+            <span class="n">saved_entity_dict</span> <span class="o">=</span> <span class="n">saved_entity_dict</span><span class="o">.</span><span class="n">__dict__</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;etag&#39;</span> <span class="ow">in</span> <span class="n">saved_entity_dict</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;etag is not in : {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">saved_entity_dict</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">saved_entity_dict</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_new</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_changed</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_saved_etag</span> <span class="o">=</span> <span class="n">saved_entity_dict</span><span class="p">[</span><span class="s">&#39;etag&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_copy_into_saved</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_populate_with_dict</span><span class="p">(</span>
+                <span class="n">dic</span><span class="o">=</span><span class="n">saved_entity_dict</span><span class="p">,</span> <span class="n">is_partial</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_partial</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+    <span class="nd">@inject_table_service</span>
+<div class="viewcode-block" id="Entity.delete"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force_delete</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        a wrapper around Azure&#39;s :func:`delete_entity`</span>
+
+
+<span class="sd">        :param bool force_delete: perform delete even if :attr:`_is_new`</span>
+<span class="sd">            is True, **default** False, this will surpress ``NotFound`` error</span>
+<span class="sd">        :raises TypeError: if :attr:`PartitionKey` is not a string</span>
+<span class="sd">        :raises TypeError: if :attr:`RowKey`: is not a string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PartitionKey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="s">&#39;PartitionKey&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s">&#39;PartitionKey is not a string, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PartitionKey</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RowKey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="s">&#39;RowKey&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s">&#39;RowKey is not a string, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RowKey</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_new</span> <span class="ow">is</span> <span class="bp">True</span> <span class="ow">and</span> <span class="n">force_delete</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s">&#39;trying to delete a none saved entity,&#39;</span> <span class="o">+</span>
+                <span class="s">&#39; please use force_delete=True&#39;</span><span class="p">)</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">delete_entity</span><span class="p">(</span>
+            <span class="n">table_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">],</span>
+            <span class="n">partition_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PartitionKey</span><span class="p">,</span>
+            <span class="n">row_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">RowKey</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+    <span class="nd">@inject_table_service</span>
+<div class="viewcode-block" id="Entity.drop_table"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Entity.html#AzureODM.Entity.Entity.drop_table">[docs]</a>    <span class="k">def</span> <span class="nf">drop_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fail_not_exist</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        a wrapper around Azure&#39;s :func:`delete_table`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">delete_table</span><span class="p">(</span>
+            <span class="n">table_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metas</span><span class="p">[</span><span class="s">&#39;table_name&#39;</span><span class="p">],</span>
+            <span class="n">fail_not_exist</span><span class="o">=</span><span class="n">fail_not_exist</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Chen Liang.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

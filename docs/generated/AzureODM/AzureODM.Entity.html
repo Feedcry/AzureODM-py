@@ -1,0 +1,595 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Entity &mdash; AzureODM Python 0.1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="AzureODM Python 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="API" href="../../reference.html"/>
+        <link rel="next" title="Fields" href="AzureODM.Fields.html"/>
+        <link rel="prev" title="Service" href="AzureODM.Service.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> AzureODM Python</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AzureODM.Fields.html">Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AzureODM.QuerySet.html">QuerySet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AzureODM.Service.html">Service</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">AzureODM Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../reference.html">API</a> &raquo;</li>
+      
+    <li>Entity</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../../_sources/generated/AzureODM/AzureODM.Entity.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="module-AzureODM.Entity">
+<span id="entity"></span><h1>Entity<a class="headerlink" href="#module-AzureODM.Entity" title="Permalink to this headline">¶</a></h1>
+<p>AzureTableODM.Entity</p>
+<p>The table entity superclass</p>
+<dl class="class">
+<dt id="AzureODM.Entity.Entity">
+<em class="property">class </em><tt class="descclassname">AzureODM.Entity.</tt><tt class="descname">Entity</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>Entity superclass</p>
+<dl class="method">
+<dt id="AzureODM.Entity.Entity.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>AttributeError</strong> &#8211; if <tt class="docutils literal"><span class="pre">table_name</span></tt> not in <tt class="xref py py-attr docutils literal"><span class="pre">metas</span></tt></li>
+<li><strong>ValueError</strong> &#8211; if <tt class="xref py py-attr docutils literal"><span class="pre">metas.table_name</span></tt> not alphnum and starts
+with [a-z]</li>
+<li><strong>KeyError</strong> &#8211; if <tt class="docutils literal"><span class="pre">kwargs</span></tt> has undefined key</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity._cache_fields">
+<tt class="descname">_cache_fields</tt><big>(</big><em>re_cache=False</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity._cache_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity._cache_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>create instance attribute</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity._validate">
+<tt class="descname">_validate</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity._validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity._validate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> &#8211; if required field is None
+when <tt class="xref py py-attr docutils literal"><span class="pre">_is_partial</span></tt> is True, when <tt class="xref py py-attr docutils literal"><span class="pre">_is_partial</span></tt> is
+False, only <tt class="docutils literal"><span class="pre">PartitionKey</span></tt> and <tt class="docutils literal"><span class="pre">RowKey</span></tt> is required</li>
+<li><strong>TypeError</strong> &#8211; if field value doesn&#8217;t match the type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity._copy_into_saved">
+<tt class="descname">_copy_into_saved</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity._copy_into_saved"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity._copy_into_saved" title="Permalink to this definition">¶</a></dt>
+<dd><p>copy the current entity values into <tt class="xref py py-attr docutils literal"><span class="pre">_saved_copy</span></tt></p>
+<p>This should be called after:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#AzureODM.Entity.Entity._populate_with_dict" title="AzureODM.Entity.Entity._populate_with_dict"><tt class="xref py py-func docutils literal"><span class="pre">_populate_with_dict()</span></tt></a></li>
+<li><a class="reference internal" href="#AzureODM.Entity.Entity.save" title="AzureODM.Entity.Entity.save"><tt class="xref py py-func docutils literal"><span class="pre">save()</span></tt></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity._check_chagned">
+<tt class="descname">_check_chagned</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity._check_chagned"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity._check_chagned" title="Permalink to this definition">¶</a></dt>
+<dd><p>compare the current values with <tt class="xref py py-attr docutils literal"><span class="pre">_saved_copy</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if any one field is different</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">False if none of the field is different</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity._populate_with_dict">
+<tt class="descname">_populate_with_dict</tt><big>(</big><em>dic</em>, <em>is_partial=False</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity._populate_with_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity._populate_with_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>populte attributes with a dictionary contains key-value pairs</p>
+<p>Will only populate exist fields, none-exist fields will be ignored</p>
+<p>will convert datetime object to UTC aware <tt class="docutils literal"><span class="pre">datetime</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dic</strong> (<em>dict</em>) &#8211; can also be <tt class="xref py py-class docutils literal"><span class="pre">AzureTableEntity</span></tt></li>
+<li><strong>is_partial</strong> (<em>bool</em>) &#8211; whether the <tt class="docutils literal"><span class="pre">dic</span></tt> is only a partial of
+the entity (return by using <tt class="docutils literal"><span class="pre">select</span></tt>) default is <tt class="docutils literal"><span class="pre">False</span></tt>,
+if the number of valid field value in <tt class="docutils literal"><span class="pre">dic</span></tt> equals the length
+of <tt class="xref py py-attr docutils literal"><span class="pre">_f</span></tt>, we will ignore the <tt class="docutils literal"><span class="pre">is_partial</span></tt> and set it to
+<tt class="docutils literal"><span class="pre">False</span></tt></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> &#8211; if <tt class="docutils literal"><span class="pre">dic</span></tt> is not a <tt class="docutils literal"><span class="pre">dict</span></tt> or
+<tt class="docutils literal"><span class="pre">azure.storage.Entity</span></tt></li>
+<li><strong>TypeError</strong> &#8211; if the <tt class="docutils literal"><span class="pre">key</span></tt> in dict doesn&#8217;t match the type
+of <tt class="docutils literal"><span class="pre">field</span></tt> &#8216;s type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity._to_dict">
+<tt class="descname">_to_dict</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity._to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity._to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate a <tt class="docutils literal"><span class="pre">dict</span></tt> for Azure SDK</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity.inject_table_service">
+<tt class="descname">inject_table_service</tt><big>(</big><em>f</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.inject_table_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.inject_table_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>a decorator to ensure <tt class="xref py py-func docutils literal"><span class="pre">get_table_service()</span></tt> won&#8217;t raise</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="AzureODM.Entity.Entity.findOne">
+<em class="property">classmethod </em><tt class="descname">findOne</tt><big>(</big><em>partition_key</em>, <em>row_key</em>, <em>select='*'</em>, <em>ts=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.findOne"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.findOne" title="Permalink to this definition">¶</a></dt>
+<dd><p>a wrapper around <tt class="xref py py-func docutils literal"><span class="pre">azure.storage.TableService.get_entity()</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>partition_key</strong> (<em>str</em>) &#8211; </li>
+<li><strong>row_key</strong> (<em>str</em>) &#8211; </li>
+<li><strong>select</strong> (<em>str</em>) &#8211; </li>
+<li><strong>ts</strong> (<em>azure.storage.TableService</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises TypeError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">if select is not a string</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None if not found</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an instance of <a class="reference internal" href="#AzureODM.Entity.Entity" title="AzureODM.Entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">Entity</span></tt></a> if found</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt>
+<tt class="descclassname">&#64;</tt><tt class="descname">inject_table_service</tt><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.inject_table_service"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="AzureODM.Entity.Entity.find">
+<em class="property">classmethod </em><tt class="descname">find</tt><big>(</big><em>filter=None</em>, <em>select=None</em>, <em>limit=None</em>, <em>ts=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>a wrapper around <tt class="xref py py-func docutils literal"><span class="pre">azure.storage.TableService.query_entity()</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filter</strong> (<em>str</em>) &#8211; </li>
+<li><strong>select</strong> (<em>str</em>) &#8211; </li>
+<li><strong>limit</strong> (<em>int</em>) &#8211; alias for <tt class="docutils literal"><span class="pre">top</span></tt></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>TypeError</strong> &#8211; if filter is not None or str</li>
+<li><strong>TypeError</strong> &#8211; if select is not None or str</li>
+<li><strong>TypeError</strong> &#8211; if limit is not None or int</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">empty list if nothing</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of <a class="reference internal" href="#AzureODM.Entity.Entity" title="AzureODM.Entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">Entity</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt>
+<tt class="descclassname">&#64;</tt><tt class="descname">inject_table_service</tt><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.inject_table_service"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="AzureODM.Entity.Entity.select">
+<em class="property">classmethod </em><tt class="descname">select</tt><big>(</big><em>fields=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>query entry point</p>
+<p>will pass the select to <tt class="xref py py-class docutils literal"><span class="pre">QuerySet</span></tt></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity._pre_save">
+<tt class="descname">_pre_save</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity._pre_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity._pre_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>perform presave operations, maybe can provide pre_save hooks
+in the future</p>
+<ul class="simple">
+<li>check if the entity is valid</li>
+<li>check if <a class="reference internal" href="#AzureODM.Entity.Entity._check_chagned" title="AzureODM.Entity.Entity._check_chagned"><tt class="xref py py-func docutils literal"><span class="pre">_check_chagned()</span></tt></a> and change <tt class="xref py py-attr docutils literal"><span class="pre">_is_changed</span></tt></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity.save_insert">
+<tt class="descname">save_insert</tt><big>(</big><em>ts=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.save_insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.save_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>a wrapper around Azure&#8217;s <tt class="xref py py-func docutils literal"><span class="pre">insert_entity()</span></tt></p>
+<dl class="method">
+<dt>
+<tt class="descclassname">&#64;</tt><tt class="descname">inject_table_service</tt><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.inject_table_service"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity.save_insert_or_replace">
+<tt class="descname">save_insert_or_replace</tt><big>(</big><em>ts=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.save_insert_or_replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.save_insert_or_replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>a wrapper around Azure&#8217;s <tt class="xref py py-func docutils literal"><span class="pre">insert_or_replace_entity()</span></tt>
+.. py:decoratormethod:: inject_table_service</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity.save_insert_or_merge">
+<tt class="descname">save_insert_or_merge</tt><big>(</big><em>ts=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.save_insert_or_merge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.save_insert_or_merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>a wrapper around Azure&#8217;s <tt class="xref py py-func docutils literal"><span class="pre">insert_or_merge_entity()</span></tt>
+.. py:decoratormethod:: inject_table_service</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity.save_merge">
+<tt class="descname">save_merge</tt><big>(</big><em>ts=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.save_merge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.save_merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>a wrapper around Azure&#8217;s <tt class="xref py py-func docutils literal"><span class="pre">merge_entity()</span></tt>
+.. py:decoratormethod:: inject_table_service</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity.save_replace">
+<tt class="descname">save_replace</tt><big>(</big><em>ts=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.save_replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.save_replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>a wrapper around Azure&#8217;s <tt class="xref py py-func docutils literal"><span class="pre">update_entity()</span></tt>
+.. py:decoratormethod:: inject_table_service</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity.save">
+<tt class="descname">save</tt><big>(</big><em>force_replace=False</em>, <em>force_merge=False</em>, <em>force_save=False</em>, <em>ignore_conflict=False</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save the entity to server</p>
+<p><strong>possible actions:</strong></p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">force_save</span></tt> to override <tt class="xref py py-attr docutils literal"><span class="pre">_is_changed</span></tt></p>
+</li>
+<li><p class="first">insert (avoiding unknowleged replacing/merging) <tt class="xref py py-func docutils literal"><span class="pre">insert_entity()</span></tt></p>
+<blockquote>
+<div><ul>
+<li><p class="first">if <tt class="xref py py-attr docutils literal"><span class="pre">_is_new</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt></p>
+</li>
+<li><dl class="first docutils">
+<dt>if <tt class="docutils literal"><span class="pre">ignore_conflict</span></tt> is True,</dt>
+<dd><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">azure.WindowsAzureConflictError</span></tt>, will be
+ignored</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">insert or replace (update) <tt class="xref py py-func docutils literal"><span class="pre">insert_or_replace_entity()</span></tt></p>
+<blockquote>
+<div><ul class="simple">
+<li>if <tt class="xref py py-attr docutils literal"><span class="pre">_is_new</span></tt> is True</li>
+<li><strong>and</strong> <tt class="docutils literal"><span class="pre">force_replace</span></tt> is True</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">insert or merge <tt class="xref py py-func docutils literal"><span class="pre">insert_or_merge_entity()</span></tt></p>
+<blockquote>
+<div><ul class="simple">
+<li>if <tt class="xref py py-attr docutils literal"><span class="pre">_is_new</span></tt> is True</li>
+<li><strong>and</strong> <tt class="docutils literal"><span class="pre">force_merge</span></tt> is True</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">merge <tt class="xref py py-func docutils literal"><span class="pre">merge_entity()</span></tt></p>
+<blockquote>
+<div><ul class="simple">
+<li>if <tt class="xref py py-attr docutils literal"><span class="pre">_is_new</span></tt> is False</li>
+<li><strong>and</strong> if <tt class="xref py py-attr docutils literal"><span class="pre">_is_partial</span></tt> is True</li>
+<li><strong>or</strong> <tt class="docutils literal"><span class="pre">force_merge</span></tt> is True</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">replace (update) <tt class="xref py py-func docutils literal"><span class="pre">update_entity()</span></tt></p>
+<blockquote>
+<div><ul class="simple">
+<li>if <tt class="xref py py-attr docutils literal"><span class="pre">_is_new</span></tt> is False</li>
+<li><strong>and</strong> if <tt class="xref py py-attr docutils literal"><span class="pre">_is_partial</span></tt> is False</li>
+<li><strong>or</strong> <tt class="docutils literal"><span class="pre">force_replace</span></tt> is True</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p><strong>we need to check the validation and check changes</strong></p>
+<p>by calling <a class="reference internal" href="#AzureODM.Entity.Entity._pre_save" title="AzureODM.Entity.Entity._pre_save"><tt class="xref py py-func docutils literal"><span class="pre">_pre_save()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>force_replace</strong> (<em>bool</em>) &#8211; default = False</li>
+<li><strong>force_merge</strong> (<em>bool</em>) &#8211; default = False</li>
+<li><strong>force_save</strong> (<em>bool</em>) &#8211; default = False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity._after_save">
+<tt class="descname">_after_save</tt><big>(</big><em>saved_entity_dict</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity._after_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity._after_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>called after save function, if successful</p>
+<p>some functions will return a full entity_dict,
+we will call <a class="reference internal" href="#AzureODM.Entity.Entity._populate_with_dict" title="AzureODM.Entity.Entity._populate_with_dict"><tt class="xref py py-func docutils literal"><span class="pre">_populate_with_dict()</span></tt></a></p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">insert_entity</span></tt></li>
+</ul>
+<p>some functions will only return a dict with only &#8216;etag&#8217; key,
+we will manually call <a class="reference internal" href="#AzureODM.Entity.Entity._copy_into_saved" title="AzureODM.Entity.Entity._copy_into_saved"><tt class="xref py py-func docutils literal"><span class="pre">_copy_into_saved()</span></tt></a> and change status
+variables</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">update_entity</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">merge_entity</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">insert_or_replace_entity</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">insert_or_merge_entity</span></tt></li>
+<li>change <tt class="xref py py-attr docutils literal"><span class="pre">_is_new</span></tt> to False (via <a class="reference internal" href="#AzureODM.Entity.Entity._populate_with_dict" title="AzureODM.Entity.Entity._populate_with_dict"><tt class="xref py py-func docutils literal"><span class="pre">_populate_with_dict()</span></tt></a>)</li>
+<li>change <tt class="xref py py-attr docutils literal"><span class="pre">_is_changed</span></tt> to False (via <a class="reference internal" href="#AzureODM.Entity.Entity._populate_with_dict" title="AzureODM.Entity.Entity._populate_with_dict"><tt class="xref py py-func docutils literal"><span class="pre">_populate_with_dict()</span></tt></a>)</li>
+<li>change <tt class="xref py py-attr docutils literal"><span class="pre">_saved_etag</span></tt> (via <a class="reference internal" href="#AzureODM.Entity.Entity._populate_with_dict" title="AzureODM.Entity.Entity._populate_with_dict"><tt class="xref py py-func docutils literal"><span class="pre">_populate_with_dict()</span></tt></a>)</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>saved_entity_dict</strong> (<em>dict</em>) &#8211; could also be AzureEntity</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>TypeError</strong> &#8211; if saved_entity_dict is other,</li>
+<li><strong>KeyError</strong> &#8211; if etag is not found in dict</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if everything is fine</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AzureODM.Entity.Entity.delete">
+<tt class="descname">delete</tt><big>(</big><em>force_delete=False</em>, <em>ts=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>a wrapper around Azure&#8217;s <tt class="xref py py-func docutils literal"><span class="pre">delete_entity()</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>force_delete</strong> (<em>bool</em>) &#8211; perform delete even if <tt class="xref py py-attr docutils literal"><span class="pre">_is_new</span></tt>
+is True, <strong>default</strong> False, this will surpress <tt class="docutils literal"><span class="pre">NotFound</span></tt> error</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> &#8211; if <tt class="xref py py-attr docutils literal"><span class="pre">PartitionKey</span></tt> is not a string</li>
+<li><strong>TypeError</strong> &#8211; if <tt class="xref py py-attr docutils literal"><span class="pre">RowKey</span></tt>: is not a string</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt>
+<tt class="descclassname">&#64;</tt><tt class="descname">inject_table_service</tt><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.inject_table_service"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="AzureODM.Entity.Entity.drop_table">
+<em class="property">classmethod </em><tt class="descname">drop_table</tt><big>(</big><em>fail_not_exist=False</em>, <em>ts=None</em><big>)</big><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.drop_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AzureODM.Entity.Entity.drop_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>a wrapper around Azure&#8217;s <tt class="xref py py-func docutils literal"><span class="pre">delete_table()</span></tt></p>
+<dl class="method">
+<dt>
+<tt class="descclassname">&#64;</tt><tt class="descname">inject_table_service</tt><a class="reference internal" href="../../_modules/AzureODM/Entity.html#Entity.inject_table_service"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="AzureODM.Entity.Entity.__weakref__">
+<tt class="descname">__weakref__</tt><a class="headerlink" href="#AzureODM.Entity.Entity.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="AzureODM.Fields.html" class="btn btn-neutral float-right" title="Fields"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="AzureODM.Service.html" class="btn btn-neutral" title="Service"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Chen Liang.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

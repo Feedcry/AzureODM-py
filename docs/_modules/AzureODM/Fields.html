@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AzureODM.Fields &mdash; AzureODM Python 0.1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="AzureODM Python 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> AzureODM Python</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/AzureODM/AzureODM.Entity.html">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/AzureODM/AzureODM.Fields.html">Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/AzureODM/AzureODM.QuerySet.html">QuerySet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/AzureODM/AzureODM.Service.html">Service</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">AzureODM Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>AzureODM.Fields</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for AzureODM.Fields</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    AzureTableODM.Fields</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_datetime_json_encoder</span><span class="p">,</span> <span class="n">_datetime_json_object_hook</span>
+
+
+<span class="k">class</span> <span class="nc">GenericField</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">_type</span><span class="p">,</span>
+                 <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">require_serializing</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">serialized_type</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The Filed Abstract Class or the most basic Field</span>
+
+<span class="sd">        :param type type: the type of the field&#39;s value</span>
+<span class="sd">        :param bool required: whether this field is required</span>
+<span class="sd">        :param bool require_serializing: if this is true, when retrieve</span>
+<span class="sd">            value of this field, it will go through deserializing by calling</span>
+<span class="sd">            :func:`deserialize`, when store value into this field,</span>
+<span class="sd">            it will require serializing by calling :func:`serialize`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#: the type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">_type</span>
+        <span class="c">#: whether it&#39;s required</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="n">required</span>
+        <span class="c">#: whether need to be serialized</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">require_serializing</span> <span class="o">=</span> <span class="n">require_serializing</span>
+        <span class="c">#: what the stored type after serialized</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serialized_type</span> <span class="o">=</span> <span class="n">serialized_type</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The serializer function</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">        :returns: serialized value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The deserializer function</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">        :returns: deserialized object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="k">class</span> <span class="nc">KeyField</span><span class="p">(</span><span class="n">GenericField</span><span class="p">):</span>
+
+    <span class="n">_type</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">require_serializing</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">serialized_type</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">required</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">StringField</span><span class="p">(</span><span class="n">GenericField</span><span class="p">):</span>
+    <span class="n">require_serializing</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">serialized_type</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_type</span> <span class="o">=</span> <span class="nb">str</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="n">required</span>
+
+
+<span class="k">class</span> <span class="nc">FloatField</span><span class="p">(</span><span class="n">GenericField</span><span class="p">):</span>
+    <span class="n">require_serializing</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">serialized_type</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_type</span> <span class="o">=</span> <span class="nb">float</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="n">required</span>
+
+
+<span class="k">class</span> <span class="nc">IntField</span><span class="p">(</span><span class="n">GenericField</span><span class="p">):</span>
+    <span class="n">require_serializing</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">serialized_type</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_type</span> <span class="o">=</span> <span class="nb">int</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="n">required</span>
+
+
+<span class="k">class</span> <span class="nc">DateField</span><span class="p">(</span><span class="n">GenericField</span><span class="p">):</span>
+    <span class="n">require_serializing</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">serialized_type</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_type</span> <span class="o">=</span> <span class="n">datetime</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="n">required</span>
+
+
+<span class="k">class</span> <span class="nc">BooleanField</span><span class="p">(</span><span class="n">GenericField</span><span class="p">):</span>
+    <span class="n">require_serializing</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">serialized_type</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_type</span> <span class="o">=</span> <span class="nb">bool</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="n">required</span>
+
+
+<div class="viewcode-block" id="JSONField"><a class="viewcode-back" href="../../generated/AzureODM/AzureODM.Fields.html#AzureODM.Fields.JSONField">[docs]</a><span class="k">class</span> <span class="nc">JSONField</span><span class="p">(</span><span class="n">GenericField</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;This is a field that store content in JSON</span>
+
+<span class="sd">    The type of this field is a Python Object (List, or Dict),</span>
+<span class="sd">    when store it into the database, it need be converted into</span>
+<span class="sd">    JSON by calling :func:`serialize`. When retrieve it, it will be converted</span>
+<span class="sd">    back into Python Object by calling: :func:`deserialize`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">require_serializing</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">serialized_type</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">_type</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+    <span class="n">keep_Null</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">keep_Null</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="n">required</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_Null</span> <span class="o">=</span> <span class="n">keep_Null</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_Null</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_datetime_json_encoder</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_Null</span> <span class="ow">is</span> <span class="bp">False</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="n">_datetime_json_object_hook</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Chen Liang.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
