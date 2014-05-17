@@ -55,7 +55,7 @@ class BlogPost(Entity):
 
 API Document
 ------------
-[http://feedcry.github.io/AzureODM/docs](http://feedcry.github.io/AzureODM/docs)
+[http://feedcry.github.io/AzureODM-py/docs](http://feedcry.github.io/AzureODM-py/docs)
 
 Authors
 -------
